@@ -36,16 +36,6 @@ type DocHandler struct {
 
 type DocHandlers map[string]DocHandler // Method : DocHandler
 
-type FuncInfo struct {
-	Pkg          string `json:"pkg"`
-	Func         string `json:"func"`
-	Comment      string `json:"comment"`
-	File         string `json:"file,omitempty"`
-	Line         int    `json:"line,omitempty"`
-	Anonymous    bool   `json:"anonymous,omitempty"`
-	Unresolvable bool   `json:"unresolvable,omitempty"`
-}
-
 func PrintRoutes(r chi.Routes) {
 	var printRoutes func(parentPattern string, r chi.Routes)
 	printRoutes = func(parentPattern string, r chi.Routes) {
