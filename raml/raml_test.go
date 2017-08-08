@@ -8,10 +8,11 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/pressly/chi"
-	"github.com/pressly/chi/docgen/raml"
-	"github.com/pressly/chi/middleware"
-	"github.com/pressly/chi/render"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/docgen"
+	"github.com/go-chi/docgen/raml"
+	"github.com/go-chi/render"
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -26,7 +27,7 @@ func TestWalkerRAML(t *testing.T) {
 	}
 
 	if err := chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
-		handlerInfo := chi.GetFuncInfo(handler)
+		handlerInfo := docgen.GetFuncInfo(handler)
 		resource := &raml.Resource{
 			Description: handlerInfo.Comment,
 		}
@@ -111,88 +112,48 @@ func ArticleCtx(next http.Handler) http.Handler {
 	})
 }
 
-// SearchArticles searches the Articles data for a matching article.
+// Search Articles.
+// Searches the Articles data for a matching article.
 // It's just a stub, but you get the idea.
 func SearchArticles(w http.ResponseWriter, r *http.Request) {
-	// Filter by query param, and search...
 	render.JSON(w, r, articles)
 }
 
-// ListArticles returns an array of Articles.
+// List Articles.
+// Returns an array of Articles.
 func ListArticles(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, articles)
 }
 
-// CreateArticle persists the posted Article and returns it
+// Create new Article.
+// Ppersists the posted Article and returns it
 // back to the client as an acknowledgement.
 func CreateArticle(w http.ResponseWriter, r *http.Request) {
-	var data struct {
-		*Article
-		OmitID interface{} `json:"id,omitempty"` // prevents 'id' from being set
-	}
-	// ^ the above is a nifty trick for how to omit fields during json unmarshalling
-	// through struct composition
-
-	if err := render.Bind(r.Body, &data); err != nil {
-		render.JSON(w, r, err.Error())
-		return
-	}
-
-	article := data.Article
-	dbNewArticle(article)
+	article := &Article{}
 
 	render.JSON(w, r, article)
 }
 
-// GetArticle returns the specific Article. You'll notice it just
-// fetches the Article right off the context, as its understood that
-// if we made it this far, the Article must be on the context. In case
-// its not due to a bug, then it will panic, and our Recoverer will save us.
+// Get a specific Article.
 func GetArticle(w http.ResponseWriter, r *http.Request) {
-	// Assume if we've reach this far, we can access the article
-	// context because this handler is a child of the ArticleCtx
-	// middleware. The worst case, the recoverer middleware will save us.
 	article := r.Context().Value("article").(*Article)
 
-	// chi provides a basic companion subpackage "github.com/pressly/chi/render", however
-	// you can use any responder compatible with net/http.
 	render.JSON(w, r, article)
 }
 
-// UpdateArticle updates an existing Article in our persistent store.
+// Update a specific Article.
+// Updates an existing Article in our persistent store.
 func UpdateArticle(w http.ResponseWriter, r *http.Request) {
 	article := r.Context().Value("article").(*Article)
 
-	data := struct {
-		*Article
-		OmitID interface{} `json:"id,omitempty"` // prevents 'id' from being overridden
-	}{Article: article}
-
-	if err := render.Bind(r.Body, &data); err != nil {
-		render.JSON(w, r, err)
-		return
-	}
-	article = data.Article
-
 	render.JSON(w, r, article)
 }
 
-// DeleteArticle removes an existing Article from our persistent store.
+// Delete a specific Article.
+// Removes an existing Article from our persistent store.
 func DeleteArticle(w http.ResponseWriter, r *http.Request) {
-	var err error
-
-	// Assume if we've reach this far, we can access the article
-	// context because this handler is a child of the ArticleCtx
-	// middleware. The worst case, the recoverer middleware will save us.
 	article := r.Context().Value("article").(*Article)
 
-	article, err = dbRemoveArticle(article.ID)
-	if err != nil {
-		render.JSON(w, r, err)
-		return
-	}
-
-	// Respond with the deleted object, up to you.
 	render.JSON(w, r, article)
 }
 
