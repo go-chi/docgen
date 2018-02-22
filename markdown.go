@@ -143,7 +143,7 @@ func (md *MarkdownDoc) WriteRoutes() {
 
 		// Routes
 		for _, rt := range dr.Routes {
-			md.buf.WriteString(fmt.Sprintf("%s- **%s**\n", tabs, rt.Pattern))
+			md.buf.WriteString(fmt.Sprintf("%s- **%s**\n", tabs, normalizer(rt.Pattern)))
 
 			if rt.Router != nil {
 				printRouter(depth+1, *rt.Router)
@@ -172,7 +172,7 @@ func (md *MarkdownDoc) WriteRoutes() {
 	for _, pat := range routePaths {
 		dr := md.Routes[pat]
 		md.buf.WriteString(fmt.Sprintf("<details>\n"))
-		md.buf.WriteString(fmt.Sprintf("<summary>`%s`</summary>\n", pat))
+		md.buf.WriteString(fmt.Sprintf("<summary>`%s`</summary>\n", normalizer(pat)))
 		md.buf.WriteString(fmt.Sprintf("\n"))
 		printRouter(0, dr)
 		md.buf.WriteString(fmt.Sprintf("\n"))
@@ -208,4 +208,11 @@ func (md *MarkdownDoc) githubSourceURL(file string, line int) string {
 	}
 	// absolute
 	return fmt.Sprintf("https://%s#L%d", file, line)
+}
+
+func normalizer(s string) string {
+	if strings.Contains(s, "/*") {
+		return strings.Replace(s, "/*", "", -1)
+	}
+	return s
 }
