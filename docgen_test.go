@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v4"
 	"github.com/go-chi/docgen"
 )
 
