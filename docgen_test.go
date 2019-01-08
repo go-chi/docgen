@@ -27,7 +27,8 @@ func hubIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 // Generate docs for the MuxBig from chi/mux_test.go
 func TestMuxBig(t *testing.T) {
-	var r, sr1, sr2, sr3, sr4, sr5, sr6 *chi.Mux
+	// var sr1, sr2, sr3, sr4, sr5, sr6 *chi.Mux
+	var r, sr3 *chi.Mux
 	r = chi.NewRouter()
 	r.Use(RequestID)
 
@@ -85,14 +86,14 @@ func TestMuxBig(t *testing.T) {
 		})
 
 		r.Route("/hubs", func(r chi.Router) {
-			sr1 = r.(*chi.Mux)
+			_ = r.(*chi.Mux) // sr1
 			r.Use(func(next http.Handler) http.Handler {
 				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 					next.ServeHTTP(w, r)
 				})
 			})
 			r.Route("/{hubID}", func(r chi.Router) {
-				sr2 = r.(*chi.Mux)
+				_ = r.(*chi.Mux) // sr2
 				r.Get("/", hubIndexHandler)
 				r.Get("/touch", func(w http.ResponseWriter, r *http.Request) {
 					ctx := r.Context()
@@ -109,7 +110,7 @@ func TestMuxBig(t *testing.T) {
 					w.Write([]byte(s))
 				})
 				sr3.Route("/{webhookID}", func(r chi.Router) {
-					sr4 = r.(*chi.Mux)
+					_ = r.(*chi.Mux) // sr4
 					r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 						ctx := r.Context()
 						s := fmt.Sprintf("/hubs/%s/webhooks/%s reqid:%s session:%s", chi.URLParam(r, "hubID"),
@@ -137,7 +138,7 @@ func TestMuxBig(t *testing.T) {
 				// routes
 
 				r.Route("/posts", func(r chi.Router) {
-					sr5 = r.(*chi.Mux)
+					_ = r.(*chi.Mux) // sr5
 					r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 						ctx := r.Context()
 						s := fmt.Sprintf("/hubs/%s/posts reqid:%s session:%s", chi.URLParam(r, "hubID"),
@@ -149,7 +150,7 @@ func TestMuxBig(t *testing.T) {
 		})
 
 		r.Route("/folders/", func(r chi.Router) {
-			sr6 = r.(*chi.Mux)
+			_ = r.(*chi.Mux) // sr6
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 				ctx := r.Context()
 				s := fmt.Sprintf("/folders/ reqid:%s session:%s",
