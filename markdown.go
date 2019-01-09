@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-chi/chi/v4"
+	"github.com/go-chi/chi"
 )
 
 type MarkdownDoc struct {

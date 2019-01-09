@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-chi/chi/v4"
+	"github.com/go-chi/chi"
 )
 
 func BuildDoc(r chi.Routes) (Doc, error) {
