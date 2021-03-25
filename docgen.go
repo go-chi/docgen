@@ -1,3 +1,4 @@
+// Package docgen generates the Chi routes documentation in JSON or Markdown.
 package docgen
 
 import (
