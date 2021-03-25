@@ -178,5 +178,4 @@ func TestMuxBig(t *testing.T) {
 	fmt.Println(docgen.JSONRoutesDoc(r))
 
 	// docgen.PrintRoutes(r)
-
 }

@@ -81,7 +81,6 @@ func (md *MarkdownDoc) WriteRoutes() {
 
 	var buildRoutesMap func(parentPattern string, ar, nr, dr *DocRouter)
 	buildRoutesMap = func(parentPattern string, ar, nr, dr *DocRouter) {
-
 		nr.Middlewares = append(nr.Middlewares, dr.Middlewares...)
 
 		for pat, rt := range dr.Routes {
@@ -97,7 +96,6 @@ func (md *MarkdownDoc) WriteRoutes() {
 					Router:   nnr,
 				}
 				buildRoutesMap(pattern, ar, nnr, rt.Router)
-
 			} else if len(rt.Handlers) > 0 {
 				nr.Routes[pat] = DocRoute{
 					Pattern:  pat,
@@ -111,12 +109,10 @@ func (md *MarkdownDoc) WriteRoutes() {
 					routeKey = routeKey[:len(routeKey)-1]
 				}
 				md.Routes[routeKey] = copyDocRouter(*ar)
-
 			} else {
 				panic("not possible")
 			}
 		}
-
 	}
 
 	// Build a route tree that consists of the full route pattern
@@ -130,7 +126,6 @@ func (md *MarkdownDoc) WriteRoutes() {
 	// Generate the markdown to render the above structure
 	var printRouter func(depth int, dr DocRouter)
 	printRouter = func(depth int, dr DocRouter) {
-
 		tabs := ""
 		for i := 0; i < depth; i++ {
 			tabs += "\t"

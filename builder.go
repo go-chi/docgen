@@ -44,7 +44,6 @@ func buildDocRouter(r chi.Routes) DocRouter {
 			subRoutes := rt.SubRoutes
 			subDrts := buildDocRouter(subRoutes)
 			drt.Router = &subDrts
-
 		} else {
 			hall := rt.Handlers["*"]
 			for method, h := range rt.Handlers {
