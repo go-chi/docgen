@@ -89,7 +89,7 @@ type Article struct {
 	Title string `json:"title"`
 }
 
-// Article fixture data
+// Article fixture data.
 var articles = []*Article{
 	{ID: "1", Title: "Hi"},
 	{ID: "2", Title: "sup"},
@@ -157,7 +157,7 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, article)
 }
 
-// A completely separate router for administrator routes
+// A completely separate router for administrator routes.
 func adminRouter() chi.Router {
 	r := chi.NewRouter()
 	r.Use(AdminOnly)

@@ -25,7 +25,7 @@ func hubIndexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(s))
 }
 
-// Generate docs for the MuxBig from chi/mux_test.go
+// Generate docs for the MuxBig from chi/mux_test.go.
 func TestMuxBig(t *testing.T) {
 	// var sr1, sr2, sr3, sr4, sr5, sr6 *chi.Mux
 	var r, sr3 *chi.Mux
