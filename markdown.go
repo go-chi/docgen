@@ -77,7 +77,7 @@ func (md *MarkdownDoc) WriteIntro() {
 }
 
 func (md *MarkdownDoc) WriteRoutes() {
-	md.buf.WriteString(fmt.Sprintf("## Routes\n\n"))
+	md.buf.WriteString("## Routes\n\n")
 
 	var buildRoutesMap func(parentPattern string, ar, nr, dr *DocRouter)
 	buildRoutesMap = func(parentPattern string, ar, nr, dr *DocRouter) {
@@ -171,15 +171,15 @@ func (md *MarkdownDoc) WriteRoutes() {
 
 	for _, pat := range routePaths {
 		dr := md.Routes[pat]
-		md.buf.WriteString(fmt.Sprintf("<details>\n"))
+		md.buf.WriteString("<details>\n")
 		md.buf.WriteString(fmt.Sprintf("<summary>`%s`</summary>\n", pat))
-		md.buf.WriteString(fmt.Sprintf("\n"))
+		md.buf.WriteString("\n")
 		printRouter(0, dr)
-		md.buf.WriteString(fmt.Sprintf("\n"))
-		md.buf.WriteString(fmt.Sprintf("</details>\n"))
+		md.buf.WriteString("\n")
+		md.buf.WriteString("</details>\n")
 	}
 
-	md.buf.WriteString(fmt.Sprintf("\n"))
+	md.buf.WriteString("\n")
 	md.buf.WriteString(fmt.Sprintf("Total # of routes: %d\n", len(md.Routes)))
 
 	// TODO: total number of handlers..
