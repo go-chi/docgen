@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -14,7 +13,7 @@ import (
 func BuildDoc(r chi.Routes) (Doc, error) {
 	d := Doc{}
 
-	goPath := os.Getenv("GOPATH")
+	goPath := getGoPath()
 	if goPath == "" {
 		return d, errors.New("docgen: unable to determine your $GOPATH")
 	}
@@ -83,7 +82,7 @@ func buildDocRouter(r chi.Routes) DocRouter {
 func buildFuncInfo(i interface{}) FuncInfo {
 	fi := FuncInfo{}
 	frame := getCallerFrame(i)
-	goPathSrc := filepath.Join(os.Getenv("GOPATH"), "src")
+	goPathSrc := filepath.Join(getGoPath(), "src")
 
 	if frame == nil {
 		fi.Unresolvable = true
