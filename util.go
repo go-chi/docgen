@@ -1,5 +1,10 @@
 package docgen
 
+import (
+	"go/build"
+	"os"
+)
+
 func copyDocRouter(dr DocRouter) DocRouter {
 	var cloneRouter func(dr DocRouter) DocRouter
 	var cloneRoutes func(drt DocRoutes) DocRoutes
@@ -34,4 +39,12 @@ func copyDocRouter(dr DocRouter) DocRouter {
 	}
 
 	return cloneRouter(dr)
+}
+
+func getGoPath() string {
+	goPath := os.Getenv("GOPATH")
+	if goPath == "" {
+		goPath = build.Default.GOPATH
+	}
+	return goPath
 }

@@ -3,7 +3,6 @@ package docgen
 import (
 	"go/parser"
 	"go/token"
-	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -23,7 +22,7 @@ type FuncInfo struct {
 func GetFuncInfo(i interface{}) FuncInfo {
 	fi := FuncInfo{}
 	frame := getCallerFrame(i)
-	goPathSrc := filepath.Join(os.Getenv("GOPATH"), "src")
+	goPathSrc := filepath.Join(getGoPath(), "src")
 
 	if frame == nil {
 		fi.Unresolvable = true
@@ -67,7 +66,11 @@ func GetFuncInfo(i interface{}) FuncInfo {
 }
 
 func getCallerFrame(i interface{}) *runtime.Frame {
-	pc := reflect.ValueOf(i).Pointer()
+	value := reflect.ValueOf(i)
+	if value.Kind() != reflect.Func {
+		return nil
+	}
+	pc := value.Pointer()
 	frames := runtime.CallersFrames([]uintptr{pc})
 	if frames == nil {
 		return nil
