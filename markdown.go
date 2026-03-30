@@ -148,7 +148,14 @@ func (md *MarkdownDoc) WriteRoutes() {
 			if rt.Router != nil {
 				printRouter(depth+1, *rt.Router)
 			} else {
-				for meth, dh := range rt.Handlers {
+				methods := make([]string, 0, len(rt.Handlers))
+				for meth := range rt.Handlers {
+					methods = append(methods, meth)
+				}
+				sort.Strings(methods)
+
+				for _, meth := range methods {
+					dh := rt.Handlers[meth]
 					md.buf.WriteString(fmt.Sprintf("%s\t- _%s_\n", tabs, meth))
 
 					// Handler middlewares
