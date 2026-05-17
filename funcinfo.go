@@ -19,6 +19,7 @@ type FuncInfo struct {
 	Unresolvable bool   `json:"unresolvable,omitempty"`
 }
 
+// GetFuncInfo returns source location and comment metadata for a handler.
 func GetFuncInfo(i interface{}) FuncInfo {
 	fi := FuncInfo{}
 	frame := getCallerFrame(i)

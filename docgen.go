@@ -1,3 +1,4 @@
+// Package docgen generates route documentation from chi routers.
 package docgen
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+// Doc is the JSON-serializable documentation for a chi router tree.
 type Doc struct {
 	Router DocRouter `json:"router"`
 }
@@ -36,6 +38,7 @@ type DocHandler struct {
 
 type DocHandlers map[string]DocHandler // Method : DocHandler
 
+// PrintRoutes prints route patterns from a chi router to stdout.
 func PrintRoutes(r chi.Routes) {
 	var printRoutes func(parentPattern string, r chi.Routes)
 	printRoutes = func(parentPattern string, r chi.Routes) {
@@ -54,6 +57,7 @@ func PrintRoutes(r chi.Routes) {
 	printRoutes("", r)
 }
 
+// JSONRoutesDoc returns indented JSON documentation for a chi router.
 func JSONRoutesDoc(r chi.Routes) string {
 	doc, _ := BuildDoc(r)
 	v, err := json.MarshalIndent(doc, "", "  ")

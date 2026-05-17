@@ -40,6 +40,7 @@ type MarkdownOpts struct {
 	URLMap map[string]string
 }
 
+// MarkdownRoutesDoc renders route documentation as Markdown for a chi router.
 func MarkdownRoutesDoc(r chi.Router, opts MarkdownOpts) string {
 	md := &MarkdownDoc{Router: r, Opts: opts}
 	if err := md.Generate(); err != nil {
