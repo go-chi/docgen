@@ -4,11 +4,15 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
 )
+
+// moduleVersionInPath matches Go module cache version segments (e.g. @v5.0.11).
+var moduleVersionInPath = regexp.MustCompile(`@v[^/]+`)
 
 type MarkdownDoc struct {
 	Opts   MarkdownOpts
@@ -36,6 +40,7 @@ type MarkdownOpts struct {
 	URLMap map[string]string
 }
 
+// MarkdownRoutesDoc renders route documentation as Markdown for a chi router.
 func MarkdownRoutesDoc(r chi.Router, opts MarkdownOpts) string {
 	md := &MarkdownDoc{Router: r, Opts: opts}
 	if err := md.Generate(); err != nil {
@@ -193,6 +198,8 @@ func (md *MarkdownDoc) WriteRoutes() {
 }
 
 func (md *MarkdownDoc) githubSourceURL(file string, line int) string {
+	file = moduleVersionInPath.ReplaceAllString(file, "")
+
 	// Currently, we only automatically link to source for github projects
 	if strings.Index(file, "github.com/") != 0 && !md.Opts.ForceRelativeLinks {
 		return ""

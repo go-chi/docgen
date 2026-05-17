@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+// BuildDoc walks a chi router and builds structured route documentation.
 func BuildDoc(r chi.Routes) (Doc, error) {
 	d := Doc{}
 
